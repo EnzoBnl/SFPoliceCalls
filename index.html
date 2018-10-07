@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SF Police Calls Visuamlization</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .button {
+    /*background-color: #f2f2f2;*/ /* Gray */
+    /*font-color: #000000;*/ /* Gray */
+    border: none;
+    padding: 0px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 28px;
+}
+  </style>
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="sf-police-calls"><code>SF police calls</code></h1>
+      <p>Calls to police stations for <strong>incidents</strong> from <em>1st Jan 2003</em> to <em>15th May 2018</em></p>
+        <h2 id="plot_title"><code>Plot</code></h2>
+      <p><code>Plot over</code>
+            <input type="text" name="fields_list" list="fields_list">
+              <datalist id="fields_list">
+                <option value="Year">
+                  <option value="YearAndMonth">
+                <option value="DayOfMonth">
+                  <option value="DayOfWeek">
+                <option value="Hour">
+                  <option value="Type">
+                  <option value="Category">
+                  <option value="PdDistrict">
+                  <option value="Resolution">
+              </datalist>
+        </p>
+        <p><code>Category=</code>
+            <input type="text" name="categories_list" list="categories_list">
+              <datalist id="categories_list">
+                <option value="FRAUD">
+                <option value="FAMILY OFFENSES">
+                  <option value="MISSING PERSON">
+                <option value="DRUGS/ALCOHOL">
+                  <option value="THEFT">
+                <option value="VIOLENCE">
+                  <option value="DELINQUENCY/BAD COMPORTMENT">
+                <option value="SEX OFFENSES">
+                  <option value="PROSTITUTION">
+              </datalist>
+          OR <code>sub-Category=</code>
+            <input type="text" name="types_list" list="types_list">
+              <datalist id="types_list">
+                  <option value="BAD CHECKS">
+                <option value="EMBEZZLEMENT">
+                <option value="WEAPON LAWS">
+                <option value="BRIBERY">
+                <option value="GAMBLING">
+                <option value="FRAUD">
+                <option value="LIQUOR LAWS">
+                <option value="SECONDARY CODES">
+                <option value="FORGERY/COUNTERFEITING">
+                <option value="WARRANTS">
+                <option value="RECOVERED VEHICLE">
+                <option value="FAMILY OFFENSES">
+                <option value="MISSING PERSON">
+                <option value="KIDNAPPING">
+                <option value="OTHER OFFENSES">
+                <option value="DRUG/NARCOTIC">
+                <option value="DRUNKENNESS">
+                <option value="DRIVING UNDER THE INFLUENCE">
+                <option value="BURGLARY">
+                <option value="EXTORTION">
+                <option value="ROBBERY">
+                <option value="VEHICLE THEFT">
+                <option value="STOLEN PROPERTY">
+                <option value="ASSAULT">
+                <option value="TREA">
+                <option value="TRESPASS">
+                <option value="PORNOGRAPHY/OBSCENE MAT">
+                <option value="VANDALISM">
+                <option value="RUNAWAY">
+                <option value="ARSON">
+                <option value="LOITERING">
+                <option value="SUSPICIOUS OCC">
+                <option value="DISORDERLY CONDUCT">
+                <option value="SEX OFFENSES, FORCIBLE">
+                <option value="SEX OFFENSES, NON FORCIBLE">
+                <option value="PROSTITUTION">
+                <option value="NON-CRIMINAL">
+              </datalist></p>
+          <p><code>Resolution=</code>
+            <input type="text" name="resolutions_list" list="resolutions_list">
+              <datalist id="resolutions_list">
+                  <option value="JUVENILE BOOKED">
+                    <option value="EXCEPTIONAL CLEARANCE">
+                    <option value="ARREST, BOOKED">
+                    <option value="CLEARED-CONTACT JUVENILE FOR MORE INFO">
+                    <option value="PROSECUTED FOR LESSER OFFENSE">
+                    <option value="LOCATED">
+                    <option value="UNFOUNDED">
+                    <option value="DISTRICT ATTORNEY REFUSES TO PROSECUTE">
+                    <option value="JUVENILE ADMONISHED">
+                    <option value="PSYCHOPATHIC CASE">
+                    <option value="COMPLAINANT REFUSES TO PROSECUTE">
+                    <option value="JUVENILE DIVERTED">
+                    <option value="JUVENILE CITED">
+                    <option value="ARREST, CITED">
+                    <option value="PROSECUTED BY OUTSIDE AGENCY">
+                    <option value="NONE">
+                    <option value="NOT PROSECUTED">
+              </datalist>
+            <button class="button" name="get_plot" id="get_plot"><code><b>PLOT</b></code></button>
+        </p>
+      <div id="plot"></div>
+        <h2 id="map_title"><code>Map</code></h2>
+        <p>
+            <code>Day/Hour:</code> ___ <code>, Conditions</code>___
+            <button class="button" name="get_map" id="get_map"><code><b>ADD</b></code></button>
+        </p>
+      <div id="map"></div>
+
+      <h2 id="DataSet_Overview_title"><code>DataSet Overview</code></h2>
+        <table>
+        <thead>
+        <tr>
+        <th>IncidntNum</th>
+        <th>Category</th>
+        <th>Descript</th>
+        <th>DayOfWeek</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>PdDistrict</th>
+        <th>Resolution</th>
+        <th>Address</th>
+        <th>X</th>
+        <th>Y</th>
+        <th>Location</th>
+        <th>PdId</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td><code>050436712</code></td>
+        <td><code>ASSAULT</code></td>
+        <td><code>BATTERY</code></td>
+        <td><code>Wednesday</code></td>
+        <td><code>2005-04-20T00:00:00</code></td>
+        <td><code>04:00</code></td>
+        <td><code>MISSION</code></td>
+        <td><code>NONE</code></td>
+        <td><code>18TH ST / CASTRO ST</code></td>
+        <td><code>-122.435002864271</code></td>
+        <td><code>37.7608878061245</code></td>
+        <td><code>"{\'human_address\': \'{""address"":""""</code></td>
+        <td><code>""city"":""""</code></td>
+        </tr>
+        <tr>
+        <td><code>080049078</code></td>
+        <td><code>LARCENY/THEFT</code></td>
+        <td><code>GRAND THEFT FROM A BUILDING</code></td>
+        <td><code>Sunday</code></td>
+        <td><code>2008-01-13T00:00:00</code></td>
+        <td><code>18:00</code></td>
+        <td><code>PARK</code></td>
+        <td><code>NONE</code></td>
+        <td><code>1100 Block of CLAYTON ST</code></td>
+        <td><code>-122.446837820235</code></td>
+        <td><code>37.7622550270122</code></td>
+        <td><code>"{\'human_address\': \'{""address"":""""</code></td>
+        <td><code>""city"":""""</code></td>
+        </tr>
+        <tr>
+        <td><code>130366639</code></td>
+        <td><code>ASSAULT</code></td>
+        <td><code>AGGRAVATED ASSAULT WITH A KNIFE</code></td>
+        <td><code>Sunday</code></td>
+        <td><code>2013-05-05T00:00:00</code></td>
+        <td><code>04:10</code></td>
+        <td><code>INGLESIDE</code></td>
+        <td><code>ARREST, BOOKED</code></td>
+        <td><code>0 Block of SGTJOHNVYOUNG LN</code></td>
+        <td><code>-122.444707063455</code></td>
+        <td><code>37.7249307267936</code></td>
+        <td><code>"{\'human_address\': \'{""address"":""""</code></td>
+        <td><code>""city"":""""</code></td>
+        </tr>
+        <tr>
+        <td><code>030810835</code></td>
+        <td><code>DRIVING UNDER THE INFLUENCE</code></td>
+        <td><code>DRIVING WHILE UNDER THE INFLUENCE OF ALCOHOL</code></td>
+        <td><code>Tuesday</code></td>
+        <td><code>2003-07-08T00:00:00</code></td>
+        <td><code>01:00</code></td>
+        <td><code>SOUTHERN</code></td>
+        <td><code>ARREST, BOOKED</code></td>
+        <td><code>MASON ST / TURK ST</code></td>
+        <td><code>-122.408953598286</code></td>
+        <td><code>37.7832878735491</code></td>
+        <td><code>"{\'human_address\': \'{""address"":""""</code></td>
+        <td><code>""city"":""""</code></td>
+        </tr>
+        <tr>
+        <td><code>130839567</code></td>
+        <td><code>OTHER OFFENSES</code></td>
+        <td><code>TRAFFIC VIOLATION ARREST</code></td>
+        <td><code>Friday</code></td>
+        <td><code>2013-10-04T00:00:00</code></td>
+        <td><code>20:53</code></td>
+        <td><code>TENDERLOIN</code></td>
+        <td><code>ARREST, BOOKED</code></td>
+        <td><code>TURK ST / LEAVENWORTH ST</code></td>
+        <td><code>-122.414056291891</code></td>
+        <td><code>37.7827931071006</code></td>
+        <td><code>"{\'human_address\': \'{""address"":""""</code></td>
+        <td><code>""city"":""""</code></td>
+        </tr>
+        </tbody>
+        </table>
+
+  </div>
+  <script type="text/javascript" src="request.js"></script>
+
+</body>
+</html>
