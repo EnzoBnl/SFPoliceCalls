@@ -29,6 +29,11 @@ button_.addEventListener("click", function (ev) {
             document.getElementById("map").innerHTML = this.getResponseHeader('img') + document.getElementById("map").innerHTML;
         }
     }
-    xhttp.open("GET", '/?query_type=map', true);
+    url = addQueriesDict('/', ["query_type=map",
+                               "plot_over=" + document.getElementById("date").value,
+                               "category=" + document.getElementById("categories_list_map").value,
+                               "type=" + document.getElementById("types_list_map").value,
+                               "resolution=" + document.getElementById("resolutions_list_map").value])
+    xhttp.open("GET", url, true);
     xhttp.send();
 });

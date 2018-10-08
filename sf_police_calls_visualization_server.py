@@ -4,12 +4,13 @@ from urllib import parse
 from http import HTTPStatus
 from hashlib import sha256
 from gevent import os
+import matplotlib.image as mim
 
 import sys
 sys.path.append('c:/prog/python/scimple/scm')
 import scimple as scm
 from scimple import pyspark_utils
-from pyspark.sql.functions import col
+
 class Plotter:
     """
     cache same requests
@@ -34,7 +35,6 @@ class Plotter:
             title=f"Plot over {query_dict['plot_over']}"
             WHERE = ""
             conditions_list = []
-            Category = ""
             if "type" in query_dict:
                 Category = f"Type==\"{query_dict['type']}\""
                 conditions_list.append(Category)
@@ -42,7 +42,6 @@ class Plotter:
                 Category = f"Category==\"{query_dict['category']}\""
                 conditions_list.append(Category)
 
-            Resolution = ""
             if "resolution" in query_dict:
                 Resolution = f"Resolution==\"{query_dict['resolution']}\""
                 conditions_list.append(Resolution)
@@ -59,17 +58,47 @@ class Plotter:
             print(sql_query)
             query_res = Plotter.spark.sql(sql_query).collect()
             if not Plotter.plot_over_is_time_stamp(query_dict["plot_over"]):
-                plot = scm.Plot(title=title).add(query_res, 0, 1, marker="bar")
+                plot = scm.Plot().add(query_res, 0, 1, marker="bar")
             else:
-                plot = scm.Plot(title=title).add(query_res, 0, 1, marker=".", markersize=3, colored_area=0.3)
-
-            plot.save_as_svg(file_name=hashed, dir_name='plots', aspect=2.2)
+                plot = scm.Plot().add(query_res, 0, 1, marker=".", markersize=3, colored_area=0.3)
+            plot.axe.set_title(title, fontsize=7)
+            plot.save_as_svg(file_name=hashed, dir_name='plots', aspect=2.7)
 
             Plotter.svg_pool.add(hashed)
             return hashed
         elif query_dict["query_type"] == "map":
-            print("OK")
-            return "test"
+            title = f"{query_dict['plot_over']} calls"
+            AND = ""
+            conditions_list = []
+            if "type" in query_dict:
+                Category = f"Type==\"{query_dict['type']}\""
+                conditions_list.append(Category)
+            elif "category" in query_dict:
+                Category = f"Category==\"{query_dict['category']}\""
+                conditions_list.append(Category)
+
+            if "resolution" in query_dict:
+                Resolution = f"Resolution==\"{query_dict['resolution']}\""
+                conditions_list.append(Resolution)
+            if len(conditions_list):
+                title += " with " + " and ".join(conditions_list)
+                AND = "AND " + " AND ".join(conditions_list)
+
+            sql_query = f"""SELECT FLOAT(X), FLOAT(Y) FROM global_temp.calls
+                            WHERE SUBSTRING(Date, 0, 7) == "{query_dict['plot_over']}"
+                                {AND}"""
+            print(sql_query)
+            query_res = Plotter.spark.sql(sql_query).collect()
+            plot = scm.Plot()
+            plot.axe.imshow(mim.imread("sf.png"))
+            plot.axe.set_xticks([])
+            plot.axe.set_yticks([])
+            plot.add(list(map(lambda e: ((e[0] + 122.44) * 2700 + 277, -1 * ((e[1] - 37.76) * 3320 - 243)), query_res)), 0,
+                  1, marker=".", markersize=2, colored_by="#dd8888")
+            plot.axe.set_title(title, fontsize=7)
+            plot.save_as_svg(file_name=hashed, dir_name='plots')
+            Plotter.svg_pool.add(hashed)
+            return hashed
 
 
 PORT = 8000
@@ -113,7 +142,7 @@ class SFPoliceCallsVisualizationServer(http.server.SimpleHTTPRequestHandler):
             if "query_type" in query_dict:
                 print(query_dict, parts)
                 img_name = Plotter.getSvgFromQueryDict(query_dict)
-                self.send_header('img', f'<img src="plots/{img_name}.svg" width="1000px"></img>')
+                self.send_header('img', f'<img src="plots/{img_name}.svg" width="{1000 if query_dict["query_type"] == "plot" else 515}px"></img>')
             self.end_headers()
             return f
         except:

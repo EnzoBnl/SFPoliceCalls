@@ -18,18 +18,20 @@
     font-size: 28px;
 }
 
+
+
+
     </style>
 </head>
 
 <body class="stackedit">
 <div class="stackedit__html"><h1 id="sf-police-calls"><code>SF police calls</code></h1>
-    <p>Calls to police stations for <strong>incidents</strong> from <em>1st Jan 2003</em> to <em>15th May 2018</em> (2 215 024 incidents)</p>
-    <h2 id="plot_title"><code>Plot</code></h2>
-    <p><code>Plot over</code>
+    <button class="button" name="get_plot" id="get_plot"><code><b>PLOT IT</b></code></button>
+    <p><code>Over</code>
         <input type="text" name="fields_list_plot" id="fields_list_plot" list="fields_list">
         <datalist id="fields_list">
             <option value="Year">
-            <option value="YearAndMonth">
+            <option value="Month">
             <option value="DayOfMonth">
             <option value="DayOfWeek">
             <option value="Hour">
@@ -38,8 +40,7 @@
             <option value="PdDistrict">
             <option value="Resolution">
         </datalist>
-    </p>
-    <p><code>Category=</code>
+        <code>Category=</code>
         <input type="text" name="categories_list_plot" id="categories_list_plot" list="categories_list">
         <datalist id="categories_list">
             <option value="FRAUD">
@@ -48,7 +49,7 @@
             <option value="DRUGS/ALCOHOL">
             <option value="THEFT">
             <option value="VIOLENCE">
-            <option value="DELINQUENCY/BAD COMPORTMENT">
+            <option value="DELINQUENCY/DISTURBANCE">
             <option value="SEX OFFENSES">
             <option value="PROSTITUTION">
         </datalist>
@@ -114,25 +115,24 @@
             <option value="NONE">
             <option value="NOT PROSECUTED">
         </datalist>
-        <button class="button" name="get_plot" id="get_plot"><code><b>REQUEST</b></code></button>
     </p>
     <div id="plot"></div>
-    <h2 id="map_title"><code>Map</code></h2>
+    <button class="button" name="get_map" id="get_map"><code><b>MAP IT</b></code></button>
     <p>
         <code>Date</code>
-        <input type="date" name="date" id="date" min="2003-01-01" max="2018-05-15">
-    </p>
-    <p><code>Category=</code>
+        <input type="text" autocomplete=true name="date" id="date" min="2003-01" max="2018-05" value="test">
+        <code>Category=</code>
         <input type="text" name="categories_list_map" id="categories_list_map" list="categories_list">
         OR <code>Type=</code>
         <input type="text" name="types_list_map" id="types_list_map" list="types_list">
         , <code>Resolution=</code>
         <input type="text" name="resolutions_list_map" id="resolutions_list_map" list="resolutions_list">
-        <button class="button" name="get_map" id="get_map"><code><b>REQUEST</b></code></button>
+
     </p>
     <div id="map"></div>
-
-    <h2 id="DataSet_Overview_title"><code>DataSet Overview</code></h2>
+    <h2 id="notes_title"><code>Notes</code></h2>
+    <p>Calls to police stations for <strong>incidents</strong> from <em>1st Jan 2003</em> to <em>15th May 2018</em> (2
+        215 024 incidents)</p>
 
 </div>
 <script type="text/javascript" src="request.js"></script>
