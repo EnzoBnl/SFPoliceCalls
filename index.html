@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SF Police Calls Visualization</title>
+    <link rel="stylesheet" href="./css/style.css"/>
+    <style>
+    .button {
+    /*background-color: #f2f2f2;*/ /* Gray */
+    /*font-color: #000000;*/ /* Gray */
+    border: none;
+    padding: 0px 0px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 28px;
+}
+
+
+
+
+
+
+    
+
+
+    </style>
+</head>
+
+<body class="stackedit">
+<div class="stackedit__html"><h1 id="sf-police-calls"><code>SF police calls</code></h1>
+    <button class="button" name="get_plot" id="get_plot"><code><b>PLOT IT</b></code></button>
+    <p><code>Over</code>
+        <select name="fields_list_plot" id="fields_list_plot">
+            <option value=""></option>
+            <option value="Year">Year</option>
+            <option value="Month">Month</option>
+            <option value="DayOfMonth">DayOfMonth</option>
+            <option value="DayOfWeek">DayOfWeek</option>
+            <option value="Hour">Hour</option>
+            <option value="Type">Type</option>
+            <option value="Category">Category</option>
+            <option value="PdDistrict">PdDistrict</option>
+            <option value="Resolution">Resolution</option>
+        </select>
+        </br><code>Category=</code>
+        <select name="categories_list_plot" id="categories_list_plot">
+            <option value=""></option>
+            <option value="FRAUD">FRAUD</option>
+            <option value="FAMILY OFFENSES">FAMILY OFFENSES</option>
+            <option value="MISSING PERSON">MISSING PERSON</option>
+            <option value="DRUGS/ALCOHOL">DRUGS/ALCOHOL</option>
+            <option value="THEFT">THEFT</option>
+            <option value="VIOLENCE">VIOLENCE</option>
+            <option value="DELINQUENCY/DISTURBANCE">DELINQUENCY/DISTURBANCE</option>
+            <option value="SEX OFFENSES">SEX OFFENSES</option>
+            <option value="PROSTITUTION">PROSTITUTION</option>
+        </select>
+        </br>OR <code>Type=</code>
+        <select name="types_list_plot" id="types_list_plot">
+            <option value=""></option>
+            <option value="BAD CHECKS">BAD CHECKS</option>
+            <option value="EMBEZZLEMENT">EMBEZZLEMENT</option>
+            <option value="WEAPON LAWS">WEAPON LAWS</option>
+            <option value="BRIBERY">BRIBERY</option>
+            <option value="GAMBLING">GAMBLING</option>
+            <option value="FRAUD">FRAUD</option>
+            <option value="LIQUOR LAWS">LIQUOR LAWS</option>
+            <option value="SECONDARY CODES">SECONDARY CODES</option>
+            <option value="FORGERY/COUNTERFEITING">FORGERY/COUNTERFEITING</option>
+            <option value="WARRANTS">WARRANTS</option>
+            <option value="RECOVERED VEHICLE">RECOVERED VEHICLE</option>
+            <option value="FAMILY OFFENSES">FAMILY OFFENSES</option>
+            <option value="MISSING PERSON">MISSING PERSON</option>
+            <option value="KIDNAPPING">KIDNAPPING</option>
+            <option value="OTHER OFFENSES">OTHER OFFENSES</option>
+            <option value="DRUG/NARCOTIC">DRUG/NARCOTIC</option>
+            <option value="DRUNKENNESS">DRUNKENNESS</option>
+            <option value="DRIVING UNDER THE INFLUENCE">DRIVING UNDER THE INFLUENCE</option>
+            <option value="BURGLARY">BURGLARY</option>
+            <option value="EXTORTION">EXTORTION</option>
+            <option value="ROBBERY">ROBBERY</option>
+            <option value="VEHICLE THEFT">VEHICLE THEFT</option>
+            <option value="STOLEN PROPERTY">STOLEN PROPERTY</option>
+            <option value="ASSAULT">ASSAULT</option>
+            <option value="TREA">TREA</option>
+            <option value="TRESPASS">TRESPASS</option>
+            <option value="PORNOGRAPHY/OBSCENE MAT">PORNOGRAPHY/OBSCENE MAT</option>
+            <option value="VANDALISM">VANDALISM</option>
+            <option value="RUNAWAY">RUNAWAY</option>
+            <option value="ARSON">ARSON</option>
+            <option value="LOITERING">LOITERING</option>
+            <option value="SUSPICIOUS OCC">SUSPICIOUS OCC</option>
+            <option value="DISORDERLY CONDUCT">DISORDERLY CONDUCT</option>
+            <option value="SEX OFFENSES, FORCIBLE">SEX OFFENSES, FORCIBLE</option>
+            <option value="SEX OFFENSES, NON FORCIBLE">SEX OFFENSES, NON FORCIBLE</option>
+            <option value="PROSTITUTION">PROSTITUTION</option>
+            <option value="NON-CRIMINAL">NON-CRIMINAL</option>
+        </select>
+        </br><code>Resolution=</code>
+        <select name="resolutions_list_plot" id="resolutions_list_plot">
+            <option value=""></option>
+            <option value="JUVENILE BOOKED">JUVENILE BOOKED</option>
+            <option value="EXCEPTIONAL CLEARANCE">EXCEPTIONAL CLEARANCE</option>
+            <option value="ARREST, BOOKED">ARREST, BOOKED</option>
+            <option value="CLEARED-CONTACT JUVENILE FOR MORE INFO">CLEARED-CONTACT JUVENILE FOR MORE INFO</option>
+            <option value="PROSECUTED FOR LESSER OFFENSE">PROSECUTED FOR LESSER OFFENSE</option>
+            <option value="LOCATED">LOCATED</option>
+            <option value="UNFOUNDED">UNFOUNDED</option>
+            <option value="DISTRICT ATTORNEY REFUSES TO PROSECUTE">DISTRICT ATTORNEY REFUSES TO PROSECUTE</option>
+            <option value="JUVENILE ADMONISHED">JUVENILE ADMONISHED</option>
+            <option value="PSYCHOPATHIC CASE">PSYCHOPATHIC CASE</option>
+            <option value="COMPLAINANT REFUSES TO PROSECUTE">COMPLAINANT REFUSES TO PROSECUTE</option>
+            <option value="JUVENILE DIVERTED">JUVENILE DIVERTED</option>
+            <option value="JUVENILE CITED">JUVENILE CITED</option>
+            <option value="ARREST, CITED">ARREST, CITED</option>
+            <option value="PROSECUTED BY OUTSIDE AGENCY">PROSECUTED BY OUTSIDE AGENCY</option>
+            <option value="NONE">NONE</option>
+            <option value="NOT PROSECUTED">NOT PROSECUTED</option>
+        </select>
+    </p>
+    <div id="plot"></div>
+    <button class="button" name="get_map" id="get_map"><code><b>MAP IT</b></code></button>
+    <p>
+        <code>From </code>
+        <input type="date" name="date_start" id="date_start" min="2003-01-01" max="2018-05-15" value="test">
+        <code> to </code>
+        <input type="date" name="date_end" id="date_end" min="2003-01-01" max="2018-05-15" value="test">
+
+        </br><code>Category=</code>
+        <select name="categories_list_map" id="categories_list_map">
+            <option value=""></option>
+            <option value="FRAUD">FRAUD</option>
+            <option value="FAMILY OFFENSES">FAMILY OFFENSES</option>
+            <option value="MISSING PERSON">MISSING PERSON</option>
+            <option value="DRUGS/ALCOHOL">DRUGS/ALCOHOL</option>
+            <option value="THEFT">THEFT</option>
+            <option value="VIOLENCE">VIOLENCE</option>
+            <option value="DELINQUENCY/DISTURBANCE">DELINQUENCY/DISTURBANCE</option>
+            <option value="SEX OFFENSES">SEX OFFENSES</option>
+            <option value="PROSTITUTION">PROSTITUTION</option>
+        </select>
+        </br>OR <code>Type=</code>
+        <select name="types_list_map" id="types_list_map">
+            <option value=""></option>
+            <option value="BAD CHECKS">BAD CHECKS</option>
+            <option value="EMBEZZLEMENT">EMBEZZLEMENT</option>
+            <option value="WEAPON LAWS">WEAPON LAWS</option>
+            <option value="BRIBERY">BRIBERY</option>
+            <option value="GAMBLING">GAMBLING</option>
+            <option value="FRAUD">FRAUD</option>
+            <option value="LIQUOR LAWS">LIQUOR LAWS</option>
+            <option value="SECONDARY CODES">SECONDARY CODES</option>
+            <option value="FORGERY/COUNTERFEITING">FORGERY/COUNTERFEITING</option>
+            <option value="WARRANTS">WARRANTS</option>
+            <option value="RECOVERED VEHICLE">RECOVERED VEHICLE</option>
+            <option value="FAMILY OFFENSES">FAMILY OFFENSES</option>
+            <option value="MISSING PERSON">MISSING PERSON</option>
+            <option value="KIDNAPPING">KIDNAPPING</option>
+            <option value="OTHER OFFENSES">OTHER OFFENSES</option>
+            <option value="DRUG/NARCOTIC">DRUG/NARCOTIC</option>
+            <option value="DRUNKENNESS">DRUNKENNESS</option>
+            <option value="DRIVING UNDER THE INFLUENCE">DRIVING UNDER THE INFLUENCE</option>
+            <option value="BURGLARY">BURGLARY</option>
+            <option value="EXTORTION">EXTORTION</option>
+            <option value="ROBBERY">ROBBERY</option>
+            <option value="VEHICLE THEFT">VEHICLE THEFT</option>
+            <option value="STOLEN PROPERTY">STOLEN PROPERTY</option>
+            <option value="ASSAULT">ASSAULT</option>
+            <option value="TREA">TREA</option>
+            <option value="TRESPASS">TRESPASS</option>
+            <option value="PORNOGRAPHY/OBSCENE MAT">PORNOGRAPHY/OBSCENE MAT</option>
+            <option value="VANDALISM">VANDALISM</option>
+            <option value="RUNAWAY">RUNAWAY</option>
+            <option value="ARSON">ARSON</option>
+            <option value="LOITERING">LOITERING</option>
+            <option value="SUSPICIOUS OCC">SUSPICIOUS OCC</option>
+            <option value="DISORDERLY CONDUCT">DISORDERLY CONDUCT</option>
+            <option value="SEX OFFENSES, FORCIBLE">SEX OFFENSES, FORCIBLE</option>
+            <option value="SEX OFFENSES, NON FORCIBLE">SEX OFFENSES, NON FORCIBLE</option>
+            <option value="PROSTITUTION">PROSTITUTION</option>
+            <option value="NON-CRIMINAL">NON-CRIMINAL</option>
+        </select>
+        </br><code>Resolution=</code>
+        <select name="resolutions_list_map" id="resolutions_list_map">
+            <option value=""></option>
+            <option value="JUVENILE BOOKED">JUVENILE BOOKED</option>
+            <option value="EXCEPTIONAL CLEARANCE">EXCEPTIONAL CLEARANCE</option>
+            <option value="ARREST, BOOKED">ARREST, BOOKED</option>
+            <option value="CLEARED-CONTACT JUVENILE FOR MORE INFO">CLEARED-CONTACT JUVENILE FOR MORE INFO</option>
+            <option value="PROSECUTED FOR LESSER OFFENSE">PROSECUTED FOR LESSER OFFENSE</option>
+            <option value="LOCATED">LOCATED</option>
+            <option value="UNFOUNDED">UNFOUNDED</option>
+            <option value="DISTRICT ATTORNEY REFUSES TO PROSECUTE">DISTRICT ATTORNEY REFUSES TO PROSECUTE</option>
+            <option value="JUVENILE ADMONISHED">JUVENILE ADMONISHED</option>
+            <option value="PSYCHOPATHIC CASE">PSYCHOPATHIC CASE</option>
+            <option value="COMPLAINANT REFUSES TO PROSECUTE">COMPLAINANT REFUSES TO PROSECUTE</option>
+            <option value="JUVENILE DIVERTED">JUVENILE DIVERTED</option>
+            <option value="JUVENILE CITED">JUVENILE CITED</option>
+            <option value="ARREST, CITED">ARREST, CITED</option>
+            <option value="PROSECUTED BY OUTSIDE AGENCY">PROSECUTED BY OUTSIDE AGENCY</option>
+            <option value="NONE">NONE</option>
+            <option value="NOT PROSECUTED">NOT PROSECUTED</option>
+        </select>
+
+    </p>
+    <div id="map"></div>
+    <h2 id="notes_title"><code>Notes</code></h2>
+    <p>Calls to police stations for <strong>incidents</strong> from <em>1st Jan 2003</em> to <em>15th May 2018</em> (2
+        215 024 incidents)</p>
+
+</div>
+<script type="text/javascript" src="./js/request.js"></script>
+
+</body>
+</html>
