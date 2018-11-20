@@ -9,7 +9,7 @@ import sys
 sys.path.append('c:/prog/python/scimple')
 import scm.scimple as scm
 from scm.scimple import pyspark_utils
-
+from gmplot import gmplot
 from os import mkdir
 from os.path import isdir
 
@@ -97,10 +97,14 @@ class Plotter:
             plot.axe.set_xticks([])
             plot.axe.set_yticks([])
             plot.add(list(map(lambda e: ((e[0] + 122.44) * 2700 + 277, -1 * ((e[1] - 37.76) * 3320 - 243)), query_res)), 0,
-                  1, marker=".", markersize=2, colored_by="#dd8888")
+                  1, marker=".", markersize=3, colored_by="#dd8888", alpha=0.3)
             plot.axe.set_title(title, fontsize=7)
             plot.save_as_svg(file_name=hashed, dir_name='plots')
             Plotter.svg_pool.add(hashed)
+            gmap = gmplot.GoogleMapPlotter(37.766956, -122.438481, 13)#, apikey="AIzaSyA9A99zBkS2QcO0yW9_sHcey57B7fJlhF8")
+            lons, lats = [e[0] for e in query_res], [e[1] for e in query_res]
+            gmap.scatter(lats, lons, '#3B0B39', size=25, marker=False)
+            gmap.draw("maps/{name}.html".format(name=hashed))
             return hashed
 
 
@@ -145,7 +149,10 @@ class SFPoliceCallsVisualizationServer(http.server.SimpleHTTPRequestHandler):
             if "query_type" in query_dict:
                 print(query_dict, parts)
                 img_name = Plotter.getSvgFromQueryDict(query_dict)
-                self.send_header('img', f'<img src="plots/{img_name}.svg" width="{1000 if query_dict["query_type"] == "plot" else 515}px"></img>')
+                if query_dict["query_type"] == "map":
+                    self.send_header('img', f'<a href="maps/{img_name}.html"><img src="plots/{img_name}.svg" width="380px"></img></a>')
+                else:
+                    self.send_header('img', f'<img src="plots/{img_name}.svg" width="1000px"></img>')
             self.end_headers()
             return f
         except:
