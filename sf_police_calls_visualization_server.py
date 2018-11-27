@@ -20,7 +20,7 @@ class Plotter:
     sc, spark = pyspark_utils.contexts()
     df = spark.read.option('header', 'true').option('separator', ',').csv("./data/police-department-incidents_.csv")
     df.createGlobalTempView("calls")
-    svg_pool = set()
+    svg_pool = set(map(lambda e: e[:e.index('.')], os.listdir("plots")))
     if not isdir('./plots'): mkdir('./plots')
     def __init__(self):
         raise RuntimeError("Singleton can't be instanciated")
@@ -61,9 +61,14 @@ class Plotter:
             print(sql_query)
             query_res = Plotter.spark.sql(sql_query).collect()
             if not Plotter.plot_over_is_time_stamp(query_dict["plot_over"]):
-                plot = scm.Plot().add(query_res, 0, 1, marker="bar")
+                # if query_dict["plot_over"] == "DayOfWeek":
+                #     plot = scm.Plot().add(
+                #                           x=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                #                           y=lambda i, x: query_res[i], marker="bar")
+                # else:
+                plot = scm.Plot(xlabel=query_dict["plot_over"], ylabel="Calls Number").add(query_res, 0, 1, marker="bar")
             else:
-                plot = scm.Plot().add(query_res, 0, 1, marker=".", markersize=3, colored_area=0.3)
+                plot = scm.Plot(xlabel=query_dict["plot_over"], ylabel="Calls Number").add(query_res, 0, 1, marker=".", markersize=3, colored_area=0.3)
             plot.axe.set_title(title, fontsize=7)
             plot.save_as_svg(file_name=hashed, dir_name='plots', aspect=2.7)
 
@@ -97,20 +102,20 @@ class Plotter:
             plot.axe.set_xticks([])
             plot.axe.set_yticks([])
             plot.add(list(map(lambda e: ((e[0] + 122.44) * 2700 + 277, -1 * ((e[1] - 37.76) * 3320 - 243)), query_res)), 0,
-                  1, marker=".", markersize=3, colored_by="#dd8888", alpha=0.3)
+                  1, marker=".", markersize=3, colored_by="#dd8888", alpha=0.5)
+            print(list(map(lambda e: ((e[0] + 122.44) * 2700 + 277, -1 * ((e[1] - 37.76) * 3320 - 243)), query_res)))
             plot.axe.set_title(title, fontsize=7)
             plot.save_as_svg(file_name=hashed, dir_name='plots')
             Plotter.svg_pool.add(hashed)
-            gmap = gmplot.GoogleMapPlotter(37.766956, -122.438481, 13)#, apikey="AIzaSyA9A99zBkS2QcO0yW9_sHcey57B7fJlhF8")
+            gmap = gmplot.GoogleMapPlotter(37.766956, -122.438481, 13, apikey="AIzaSyA9A99zBkS2QcO0yW9_sHcey57B7fJlhF8")
             lons, lats = [e[0] for e in query_res], [e[1] for e in query_res]
-            gmap.scatter(lats, lons, '#3B0B39', size=25, marker=False)
+            gmap.scatter(lats, lons, '#000000', size=25, marker=False)
             gmap.draw("maps/{name}.html".format(name=hashed))
             return hashed
 
 
-PORT = 8000
-
 class SFPoliceCallsVisualizationServer(http.server.SimpleHTTPRequestHandler):
+    PORT = 8000
     def send_head(self):
         path = self.translate_path(self.path)
         f = None
@@ -171,10 +176,6 @@ class SFPoliceCallsVisualizationServer(http.server.SimpleHTTPRequestHandler):
 
 Handler = SFPoliceCallsVisualizationServer
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    print("serving at port", PORT)
+with socketserver.TCPServer(("", SFPoliceCallsVisualizationServer.PORT), Handler) as httpd:
+    print("serving at port", SFPoliceCallsVisualizationServer.PORT)
     httpd.serve_forever()
-
-
-# TODO: From Date to Date map !, cumulative plot if no category selected , gmap plot boronoi commisariat
-# virer OUTLAYER !!! -175 000
