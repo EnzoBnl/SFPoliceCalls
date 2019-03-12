@@ -7,7 +7,7 @@ Intuitively explore police calls from San Francisco Police Stations
 - Intuitive UI to quickly generate the plot you want 
 - Python back-end using `PySpark` and `Scimple`
 - Plots are cached to be printed again faster
-- Use of *Google Maps* API throught Python `gmplot` package for visualization location of selected calls
+- Use of *Google Maps* API throught Python `gmplot` package to visualize the location of selected calls
 
 ## Test it
 
